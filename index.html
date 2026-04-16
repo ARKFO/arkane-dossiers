@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ARKANE DOS">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="mobile-web-app-capable" content="yes">
+<title>ARKANE DOSSIERS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<style>
+:root{
+  --blue:#1565C0;--blue-d:#0D47A1;--blue-l:#42A5F5;--blue-bg:rgba(21,101,192,.06);--blue-glow:rgba(21,101,192,.12);
+  --orange:#E65100;--orange-l:#FF6D00;--orange-bg:rgba(230,81,0,.06);
+  --green:#2E7D32;--green-l:#43A047;--green-bg:rgba(46,125,50,.06);
+  --red:#C62828;--red-bg:rgba(198,40,40,.06);
+  --warn:#F57F17;--warn-bg:rgba(245,127,23,.06);
+  --purple:#6A1B9A;--purple-bg:rgba(106,27,154,.06);
+  --bg:#F5F5F5;--white:#FFFFFF;
+  --card:#FFFFFF;--card-h:#FAFAFA;
+  --bdr:#E0E0E0;--bdr-s:#BDBDBD;
+  --txt:#212121;--txt2:#616161;--txt3:#9E9E9E;
+  --r:16px;--rs:12px;--rx:8px;
+  --ease:cubic-bezier(.4,0,.2,1);
+  --shadow:0 2px 8px rgba(0,0,0,.06);
+  --shadow-l:0 4px 20px rgba(0,0,0,.08);
+  --header-h:56px;
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--txt);line-height:1.5;
+  -webkit-font-smoothing:antialiased;min-height:100dvh}
+input,select,textarea,button{font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+
+/* ═══ HEADER ═══ */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:5000;background:#fff;height:var(--header-h);
+  display:flex;align-items:center;justify-content:space-between;padding:0 16px;
+  border-bottom:1px solid var(--bdr);box-shadow:var(--shadow)}
+.hdr-left{display:flex;align-items:center;gap:10px}
+.hdr-logo{width:36px;height:36px;border-radius:10px;overflow:hidden;box-shadow:var(--shadow);
+  background:var(--blue);display:flex;align-items:center;justify-content:center}
+.hdr-logo .material-icons-round{color:#fff;font-size:22px}
+.hdr-info{display:flex;flex-direction:column}
+.hdr-title{font-weight:800;font-size:16px;color:var(--blue)}
+.hdr-sub{font-size:10px;color:var(--txt3);font-weight:500}
+.hdr-right{display:flex;align-items:center;gap:8px}
+
+.hdr-btn{width:36px;height:36px;border-radius:var(--rx);background:var(--bg);border:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--txt2);
+  transition:all .15s var(--ease);position:relative}
+.hdr-btn:hover,.hdr-btn:active{background:var(--blue-bg);color:var(--blue);border-color:var(--blue)}
+.hdr-btn .material-icons-round{font-size:20px}
+.hdr-badge{position:absolute;top:-3px;right:-3px;background:var(--red);color:#fff;
+  border-radius:10px;padding:1px 5px;font-size:9px;font-weight:800;min-width:16px;text-align:center;display:none}
+.hdr-badge.vis{display:block}
+
+.hdr-user{display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--blue-bg);border:1px solid var(--blue-glow);
+  border-radius:99px;font-size:11px;font-weight:700;color:var(--blue);cursor:pointer}
+
+/* ═══ MAIN ═══ */
+.main{padding:calc(var(--header-h) + 16px) 16px 24px;max-width:900px;margin:0 auto}
+
+/* ═══ STATS ═══ */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rs);padding:12px;
+  box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue)}
+.stat.o::before{background:var(--orange)}
+.stat.g::before{background:var(--green)}
+.stat.r::before{background:var(--red)}
+.stat.p::before{background:var(--purple)}
+.stat-l{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;font-weight:700}
+.stat-v{font-size:24px;font-weight:800;color:var(--blue);margin-top:2px;font-family:'JetBrains Mono',monospace}
+.stat.o .stat-v{color:var(--orange)}
+.stat.g .stat-v{color:var(--green)}
+.stat.r .stat-v{color:var(--red)}
+.stat.p .stat-v{color:var(--purple)}
+
+/* ═══ SETTINGS ═══ */
+.sett{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);
+  box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden;display:none}
+.sett.show{display:block}
+.sett-head{padding:14px 16px;font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.5px;
+  border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px;justify-content:space-between}
+.sett-head .material-icons-round{font-size:16px;color:var(--blue)}
+.sett-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;padding:14px 16px}
+.sett-card{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rs);padding:12px}
+.sett-card .s-label{font-size:10px;color:var(--txt2);margin-bottom:8px;font-weight:700}
+.sett-card .s-inputs{display:flex;gap:8px;align-items:center}
+.sett-card .s-group{display:flex;flex-direction:column;gap:2px}
+.sett-card .s-group label{font-size:8px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.sett-card .s-group input{width:54px;padding:8px;border:2px solid var(--bdr);border-radius:var(--rx);
+  background:#fff;color:var(--blue);font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;text-align:center;outline:none}
+.sett-card .s-group input:focus{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-glow)}
+.sett-card .s-sep{color:var(--txt3);font-size:14px;margin-top:14px}
+
+/* ═══ TOOLBAR ═══ */
+.toolbar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.inp{width:100%;padding:14px 16px;font-size:15px;background:#fff;border:2px solid var(--bdr);
+  border-radius:var(--rs);color:var(--txt);outline:none;transition:all .2s var(--ease);min-height:48px}
+.inp:focus{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-glow)}
+.inp::placeholder{color:var(--txt3)}
+.inp-search{flex:1;min-width:200px}
+.sel{padding:14px 40px 14px 14px;font-size:14px;background:#fff;border:2px solid var(--bdr);border-radius:var(--rs);
+  color:var(--txt);cursor:pointer;outline:none;min-height:48px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%239E9E9E' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;-webkit-appearance:none}
+.sel:focus{border-color:var(--blue)}
+.btn{padding:14px 20px;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .15s var(--ease);display:inline-flex;align-items:center;gap:8px;
+  justify-content:center;min-height:48px;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(.97)}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 2px 12px var(--blue-glow)}
+.btn-blue:hover{background:var(--blue-d)}
+.btn-ghost{background:#fff;color:var(--txt2);border:2px solid var(--bdr)}
+.btn-ghost:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-bg)}
+.btn-sm{min-height:40px;padding:10px 14px;font-size:12px}
+.btn-warn{background:var(--warn);color:#fff}
+
+/* ═══ DOSSIERS ═══ */
+.grid{display:grid;gap:12px}
+.dos{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px;
+  box-shadow:var(--shadow);transition:all .15s var(--ease)}
+.dos.u{border-left:4px solid var(--red)}
+.dos.w{border-left:4px solid var(--warn)}
+
+.dos-alert{padding:10px 14px;border-radius:var(--rs);margin-bottom:12px;
+  font-size:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.dos-alert.urgent{background:var(--red-bg);border:2px solid rgba(198,40,40,.15);color:var(--red)}
+.dos-alert.warning{background:var(--warn-bg);border:2px solid rgba(245,127,23,.15);color:var(--warn)}
+
+.dos-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:10px}
+.dos-title{font-size:15px;color:var(--blue);font-weight:800;margin-bottom:2px}
+.dos-meta{font-size:11px;color:var(--txt3);display:flex;gap:10px;flex-wrap:wrap}
+.dos-meta b{color:var(--txt2)}
+
+.dos-status{font-size:10px;padding:5px 12px;border-radius:99px;font-weight:700;white-space:nowrap;
+  text-transform:uppercase;letter-spacing:.4px}
+.st-c{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-glow)}
+.st-t{background:var(--green-bg);color:var(--green);border:1px solid rgba(46,125,50,.15)}
+.st-r{background:var(--red-bg);color:var(--red);border:1px solid rgba(198,40,40,.15)}
+
+.prolong-tag{display:inline-flex;align-items:center;gap:3px;font-size:9px;padding:2px 7px;border-radius:99px;
+  background:var(--purple-bg);border:1px solid rgba(106,27,154,.15);color:var(--purple);font-weight:700;margin-left:5px}
+
+.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.step{background:#fff;border:2px solid var(--bdr);border-radius:var(--rs);padding:10px 4px;
+  text-align:center;cursor:pointer;transition:all .15s var(--ease);position:relative}
+.step:active{border-color:var(--blue);background:var(--blue-bg)}
+.step-i{width:30px;height:30px;border-radius:50%;background:var(--bg);color:var(--txt3);
+  font-weight:800;display:flex;align-items:center;justify-content:center;
+  margin:0 auto 4px;font-size:13px;font-family:'JetBrains Mono',monospace}
+.step-l{font-size:9px;font-weight:700;color:var(--txt3);line-height:1.2}
+.step-d{font-size:8px;color:var(--txt3);margin-top:2px;font-family:'JetBrains Mono',monospace}
+
+.step.done{background:var(--green-bg);border-color:rgba(46,125,50,.3)}
+.step.done .step-i{background:var(--green);color:#fff}
+.step.done .step-l{color:var(--green)}
+
+.step.cur{background:var(--blue-bg);border-color:var(--blue);animation:gl-b 2s infinite}
+.step.cur .step-i{background:var(--blue);color:#fff}
+.step.cur .step-l{color:var(--blue)}
+
+.step.wrn{background:var(--warn-bg);border-color:var(--warn);border-width:2px}
+.step.wrn .step-i{background:var(--warn);color:#fff}
+.step.wrn .step-l{color:var(--warn)}
+
+.step.urg{background:var(--red-bg);border-color:var(--red);border-width:2px;animation:gl-r 1.5s infinite}
+.step.urg .step-i{background:var(--red);color:#fff}
+.step.urg .step-l{color:var(--red)}
+
+.step.fut{background:var(--purple-bg);border-color:rgba(106,27,154,.2)}
+.step.fut .step-i{background:var(--purple);color:#fff}
+.step.fut .step-l{color:var(--purple)}
+
+.step-ind{position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;
+  font-size:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;
+  box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.step-ind.w{background:var(--warn)}
+.step-ind.u{background:var(--red)}
+
+@keyframes gl-b{0%,100%{box-shadow:0 0 0 0 var(--blue-glow)}50%{box-shadow:0 0 0 6px rgba(21,101,192,0)}}
+@keyframes gl-r{0%,100%{box-shadow:0 0 0 0 rgba(198,40,40,.2)}50%{box-shadow:0 0 0 6px rgba(198,40,40,0)}}
+
+.pbar{height:3px;background:var(--bdr);border-radius:99px;margin-top:10px;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--green),var(--green-l));transition:width .3s}
+
+/* ═══ MODALS ═══ */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.3);backdrop-filter:blur(4px);
+  display:none;align-items:flex-end;justify-content:center;z-index:6000;padding:0}
+.ov.show{display:flex}
+.mdl{background:#fff;border-radius:var(--r) var(--r) 0 0;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;
+  box-shadow:0 -4px 30px rgba(0,0,0,.1);animation:mdl-up .25s var(--ease)}
+@keyframes mdl-up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mdl-handle{width:36px;height:4px;background:var(--bdr);border-radius:99px;margin:10px auto}
+.mdl-head{padding:16px 20px 8px;font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px;color:var(--blue)}
+.mdl-body{padding:4px 20px 20px}
+.mdl-foot{padding:12px 20px 24px;display:flex;gap:10px}
+.mdl-foot .btn{flex:1}
+.lbl{display:block;font-size:12px;font-weight:700;color:var(--txt2);margin-bottom:6px}
+.field{margin-bottom:14px}
+textarea.inp{min-height:80px;resize:vertical}
+
+/* ═══ TOAST ═══ */
+.toast{position:fixed;top:calc(var(--header-h) + 8px);left:50%;transform:translateX(-50%) translateY(-80px);
+  background:#fff;border:2px solid var(--bdr);color:var(--txt);padding:14px 20px;border-radius:var(--rs);
+  box-shadow:var(--shadow-l);z-index:8000;transition:transform .3s var(--ease);
+  display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;max-width:calc(100vw - 32px)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:var(--green)}.toast.success .ti{color:var(--green)}
+.toast.error{border-color:var(--red)}.toast.error .ti{color:var(--red)}
+
+/* ═══ LOADING ═══ */
+.lds{position:fixed;inset:0;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);display:none;
+  align-items:center;justify-content:center;flex-direction:column;gap:14px;z-index:9999}
+.lds.show{display:flex}
+.lds-spinner{width:36px;height:36px;border:3px solid var(--bdr);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lds-txt{font-size:13px;color:var(--txt3);font-weight:600}
+
+/* ═══ EMPTY ═══ */
+.empty{text-align:center;padding:40px 16px;color:var(--txt3)}
+.empty .material-icons-round{font-size:48px;color:var(--bdr);margin-bottom:8px;display:block}
+
+@media(max-width:640px){
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .steps{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:400px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="ld" class="lds"><div class="lds-spinner"></div><div class="lds-txt">Chargement...</div></div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"><span class="material-icons-round ti">check_circle</span><span id="toast-msg"></span></div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="hdr-logo"><span class="material-icons-round">hexagon</span></div>
+    <div class="hdr-info">
+      <div class="hdr-title">ARKANE DOSSIERS</div>
+      <div class="hdr-sub">Suivi des chantiers</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-btn" onclick="toggleNotifs()" title="Alertes">
+      <span class="material-icons-round">notifications</span>
+      <span class="hdr-badge" id="bell-badge">0</span>
+    </div>
+    <div class="hdr-btn" onclick="toggleSettings()" title="Paramètres">
+      <span class="material-icons-round">tune</span>
+    </div>
+    <div class="hdr-btn" onclick="refreshData()" title="Rafraîchir">
+      <span class="material-icons-round">refresh</span>
+    </div>
+    <div class="hdr-user" onclick="exportCSV()">
+      <span class="material-icons-round" style="font-size:16px">download</span> Export
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div id="stats-zone"></div>
+
+  <!-- SETTINGS PANEL -->
+  <div class="sett" id="sett-panel"></div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <input type="text" class="inp inp-search" placeholder="Rechercher par N°, client, adresse..." id="search" oninput="renderDossiers()">
+    <select class="sel" id="filter" onchange="renderDossiers()">
+      <option value="">Tous</option>
+      <option value="alerte">⚠ À surveiller</option>
+      <option value="en-cours">En cours</option>
+      <option value="termine">Terminés</option>
+    </select>
+    <button class="btn btn-blue" onclick="openNewDossier()">
+      <span class="material-icons-round">add</span> Nouveau dossier
+    </button>
+  </div>
+
+  <div class="grid" id="grid">
+    <div class="empty">
+      <span class="material-icons-round">hourglass_empty</span>
+      Chargement des dossiers...
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NOUVEAU DOSSIER -->
+<div class="ov" id="m-new" onclick="if(event.target===this)closeModal('m-new')">
+  <div class="mdl">
+    <div class="mdl-handle"></div>
+    <div class="mdl-head"><span class="material-icons-round">note_add</span> Nouveau dossier</div>
+    <div class="mdl-body">
+      <div class="field"><label class="lbl">N° Dossier / Commande *</label><input class="inp" id="f-num" placeholder="Ex: DOS-2026-050"></div>
+      <div class="field"><label class="lbl">Client *</label><input class="inp" id="f-client" placeholder="Nom du client"></div>
+      <div class="field"><label class="lbl">Adresse / Chantier *</label><input class="inp" id="f-adresse" placeholder="Adresse du chantier"></div>
+      <div class="field"><label class="lbl">Responsable</label><select class="inp" id="f-resp" style="padding-right:40px"></select></div>
+      <div class="field"><label class="lbl">Observations</label><textarea class="inp" id="f-obs" placeholder="Notes éventuelles..."></textarea></div>
+    </div>
+    <div class="mdl-foot">
+      <button class="btn btn-ghost" onclick="closeModal('m-new')">Annuler</button>
+      <button class="btn btn-blue" onclick="submitNewDossier()"><span class="material-icons-round">check</span> Créer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VALIDER ÉTAPE -->
+<div class="ov" id="m-step" onclick="if(event.target===this)closeModal('m-step')">
+  <div class="mdl">
+    <div class="mdl-handle"></div>
+    <div class="mdl-head"><span class="material-icons-round">check_circle</span> <span id="ms-title"></span></div>
+    <div class="mdl-body"><p id="ms-text" style="font-size:14px;color:var(--txt2)"></p></div>
+    <div class="mdl-foot">
+      <button class="btn btn-ghost" onclick="closeModal('m-step')">Annuler</button>
+      <button class="btn btn-blue" onclick="confirmStep()"><span class="material-icons-round">check</span> Valider</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROLONGER -->
+<div class="ov" id="m-prolong" onclick="if(event.target===this)closeModal('m-prolong')">
+  <div class="mdl">
+    <div class="mdl-handle"></div>
+    <div class="mdl-head"><span class="material-icons-round">timer</span> Prolonger le délai</div>
+    <div class="mdl-body">
+      <p id="mp-text" style="font-size:14px;color:var(--txt2);margin-bottom:16px"></p>
+      <div class="field"><label class="lbl">Jours supplémentaires</label><input type="number" class="inp" id="mp-days" min="1" max="90" value="7" style="font-family:'JetBrains Mono',monospace;font-size:20px;text-align:center;font-weight:800"></div>
+      <div class="field"><label class="lbl">Motif</label><textarea class="inp" id="mp-motif" placeholder="Ex: Attente données client, congés..."></textarea></div>
+    </div>
+    <div class="mdl-foot">
+      <button class="btn btn-ghost" onclick="closeModal('m-prolong')">Annuler</button>
+      <button class="btn btn-warn" onclick="confirmProlong()"><span class="material-icons-round">schedule</span> Prolonger</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzuIcInuab8lzIKgxVYsiNXe3QCnOVjnPCPICA2ykZuQezpmSdI2YDIoJk4FeRH3065/exec";
+const API_KEY="ARKANE_SECURE_2026_DOSSIERS_a1b2c3d4";
+const UTILISATEUR="Dja";
+
+let dossiers=[];let config={responsables:[],parametres:{}};
+let pendingStepAction=null;let prolongTarget=null;
+
+const ETAPES=[
+  {key:'reception',label:'Réception commande',icon:'1'},
+  {key:'terrain',label:'Terrain réalisé',icon:'2',delaiKey:'terrain'},
+  {key:'bureau',label:'Bureau (DAO)',icon:'3',delaiKey:'bureau'},
+  {key:'livraison',label:'Plan livré',icon:'4',delaiKey:'livraison'},
+  {key:'facture',label:'Facturé',icon:'5',delaiKey:'facture'},
+  {key:'interventions',label:'Interv. futures',icon:'+',future:true},
+];
+const DM={reception:'dateReception',terrain:'dateTerrain',bureau:'dateBureau',livraison:'dateLivraison',facture:'dateFacture'};
+const PM={terrain:'prolongTerrain',bureau:'prolongBureau',livraison:'prolongLivraison',facture:'prolongFacture'};
+
+// API
+async function apiGet(a){try{const r=await fetch(SCRIPT_URL+"?action="+a);return await r.json()}catch(e){showToast(e.message,'error');return{success:false}}}
+async function apiPost(d){try{d.apiKey=API_KEY;d.utilisateur=UTILISATEUR;const r=await fetch(SCRIPT_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)});return await r.json()}catch(e){showToast(e.message,'error');return{success:false}}}
+
+function showToast(msg,type='success'){const t=document.getElementById('toast');const i=t.querySelector('.ti');
+  document.getElementById('toast-msg').textContent=msg;
+  t.className='toast '+(type||'success');i.textContent=type==='error'?'error':'check_circle';
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500)}
+function showLoading(v){document.getElementById('ld').classList.toggle('show',v)}
+
+async function init(){
+  showLoading(true);
+  const[c,d]=await Promise.all([apiGet("getConfig"),apiGet("getDossiers")]);
+  if(c.success)config=c.data;if(d.success)dossiers=d.data.dossiers;
+  renderAll();showLoading(false);
+}
+function renderAll(){renderStats();renderSettings();renderDossiers()}
+async function refreshData(){showLoading(true);const r=await apiGet("getDossiers");if(r.success)dossiers=r.data.dossiers;renderAll();showLoading(false)}
+
+function parseFR(s){if(!s)return null;const m=String(s).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);if(m)return new Date(+m[3],+m[2]-1,+m[1]);const d=new Date(s);return isNaN(d.getTime())?null:d}
+function isTermine(d){return ETAPES.filter(e=>!e.future).every(e=>d[DM[e.key]])}
+
+function getAlerte(dos){
+  const p=config.parametres;
+  for(let i=1;i<ETAPES.length;i++){const e=ETAPES[i];if(e.future)continue;
+    if(dos[DM[e.key]])continue;const prev=ETAPES[i-1];const pv=dos[DM[prev.key]];if(!pv)return null;
+    const pd=parseFR(pv);if(!pd)return null;const today=new Date();today.setHours(0,0,0,0);
+    const days=Math.floor((today-pd)/864e5);const prol=dos[PM[e.key]]||0;
+    const dl=p[e.delaiKey]||{warning:5,urgent:8};
+    if(days>=dl.urgent+prol)return{niveau:'urgent',etape:e,days,cible:dl.urgent,prolong:prol};
+    if(days>=dl.warning+prol)return{niveau:'warning',etape:e,days,cible:dl.warning,prolong:prol};
+    return null;
+  }return null;
+}
+
+function renderStats(){
+  const t=dossiers.length,ec=dossiers.filter(d=>!isTermine(d)).length,ok=dossiers.filter(isTermine).length;
+  const al=dossiers.filter(d=>getAlerte(d)).length;
+  document.getElementById('stats-zone').innerHTML=`<div class="stats">
+    <div class="stat"><div class="stat-l">Total</div><div class="stat-v">${t}</div></div>
+    <div class="stat o"><div class="stat-l">En cours</div><div class="stat-v">${ec}</div></div>
+    <div class="stat g"><div class="stat-l">Terminés</div><div class="stat-v">${ok}</div></div>
+    <div class="stat r"><div class="stat-l">Alertes</div><div class="stat-v">${al}</div></div>
+    <div class="stat p"><div class="stat-l">Interv.</div><div class="stat-v">0</div></div>
+  </div>`;
+  const b=document.getElementById('bell-badge');b.textContent=al;b.classList.toggle('vis',al>0);
+}
+
+function renderSettings(){
+  const p=config.parametres;
+  const tr=[{from:'Réception',to:'Terrain',key:'terrain'},{from:'Terrain',to:'Bureau (DAO)',key:'bureau'},
+    {from:'Bureau (DAO)',to:'Plan livré',key:'livraison'},{from:'Plan livré',to:'Facturé',key:'facture'}];
+  const cards=tr.map(t=>{const d=p[t.key]||{warning:5,urgent:8};
+    return`<div class="sett-card"><div class="s-label">${t.from} → ${t.to}</div>
+    <div class="s-inputs"><div class="s-group"><label>🟠 Alerte</label><input type="number" value="${d.warning}" min="1" max="90" onchange="updDelai('${t.key}','warning',+this.value)"></div>
+    <div class="s-sep">→</div><div class="s-group"><label>🔴 Urgent</label><input type="number" value="${d.urgent}" min="1" max="90" onchange="updDelai('${t.key}','urgent',+this.value)"></div>
+    <div class="s-sep" style="font-size:10px">jours</div></div></div>`;}).join('');
+  document.getElementById('sett-panel').innerHTML=`
+    <div class="sett-head"><span><span class="material-icons-round">tune</span> Paramétrage des délais</span>
+      <button class="btn btn-blue btn-sm" onclick="saveSettings()"><span class="material-icons-round" style="font-size:16px">save</span> Sauvegarder</button>
+    </div><div class="sett-grid">${cards}</div>`;
+}
+function updDelai(k,t,v){if(!config.parametres[k])config.parametres[k]={warning:5,urgent:8};config.parametres[k][t]=v;renderDossiers();renderStats()}
+async function saveSettings(){showLoading(true);const r=await apiPost({action:'updateParametres',parametres:config.parametres});showLoading(false);if(r.success)showToast('Paramètres sauvegardés');else showToast(r.message,'error')}
+function toggleSettings(){document.getElementById('sett-panel').classList.toggle('show')}
+
+function renderDossiers(){
+  const s=document.getElementById('search').value.toLowerCase();const f=document.getElementById('filter').value;
+  let list=dossiers.filter(d=>{
+    if(s&&!d.numero.toLowerCase().includes(s)&&!d.client.toLowerCase().includes(s)&&!d.adresse.toLowerCase().includes(s))return false;
+    if(f==='alerte')return getAlerte(d)!==null;if(f==='en-cours')return!isTermine(d);if(f==='termine')return isTermine(d);return true;
+  });
+  list.sort((a,b)=>{const sc=n=>n?.niveau==='urgent'?2:n?.niveau==='warning'?1:0;return sc(getAlerte(b))-sc(getAlerte(a))});
+  if(!list.length){document.getElementById('grid').innerHTML='<div class="empty"><span class="material-icons-round">folder_open</span>Aucun dossier trouvé</div>';return}
+  document.getElementById('grid').innerHTML=list.map(buildDos).join('');
+}
+
+function buildDos(dos){
+  const al=getAlerte(dos);const term=isTermine(dos);
+  const cls=al?.niveau==='urgent'?' u':al?.niveau==='warning'?' w':'';
+  const stCls=term?'st-t':(al?.niveau==='urgent'?'st-r':'st-c');
+  const stTxt=term?'✓ TERMINÉ':(al?.niveau==='urgent'?'⚠ EN RETARD':al?.niveau==='warning'?'⚠ À SURVEILLER':'● EN COURS');
+  const comp=ETAPES.filter(e=>!e.future&&dos[DM[e.key]]).length;
+  const tot=ETAPES.filter(e=>!e.future).length;const pct=Math.round(comp/tot*100);
+
+  let alertHtml='';
+  if(al){const ic=al.niveau==='urgent'?'🔴':'🟠';const ext=al.prolong>0?` (+${al.prolong}j)`:'';
+    alertHtml=`<div class="dos-alert ${al.niveau}"><div>${ic} <b>${al.niveau==='urgent'?'URGENT':'Attention'}</b> — « ${al.etape.label} » ${al.days}j / cible ${al.cible}j${ext}</div>
+      <button class="btn btn-warn btn-sm" onclick="openProlong('${dos.numero}','${al.etape.key}')"><span class="material-icons-round" style="font-size:16px">timer</span> Prolonger</button></div>`;}
+
+  const prolBadges=ETAPES.filter(e=>!e.future&&PM[e.key]&&dos[PM[e.key]]>0&&!dos[DM[e.key]])
+    .map(e=>`<span class="prolong-tag"><span class="material-icons-round" style="font-size:11px">schedule</span>${e.label} +${dos[PM[e.key]]}j</span>`).join('');
+
+  const stepsHtml=ETAPES.map((e,idx)=>{const done=dos[DM[e.key]];
+    const prevDone=idx===0||dos[DM[ETAPES[idx-1].key]];const isCur=!done&&prevDone&&!e.future;
+    const isAl=al&&al.etape.key===e.key;
+    let c='';if(e.future)c='fut';else if(done)c='done';else if(isAl)c=al.niveau==='urgent'?'urg':'wrn';else if(isCur)c='cur';
+    const dt=e.future?'—':(done||'—');
+    const ind=isAl?`<div class="step-ind ${al.niveau==='urgent'?'u':'w'}">!</div>`:'';
+    return`<div class="step ${c}" onclick="clickStep('${dos.numero}','${e.key}')">${ind}<div class="step-i">${done&&!e.future?'✓':e.icon}</div><div class="step-l">${e.label}</div><div class="step-d">${dt}</div></div>`;
+  }).join('');
+
+  return`<div class="dos${cls}">${alertHtml}<div class="dos-head"><div>
+    <div class="dos-title">${dos.numero} — ${dos.client} ${prolBadges}</div>
+    <div class="dos-meta"><span>📍 <b>${dos.adresse}</b></span><span>👤 ${dos.responsable}</span><span>📅 ${dos.dateReception}</span>
+    ${dos.lienDrive?`<span><a href="${dos.lienDrive}" target="_blank" style="color:var(--blue);font-weight:700">📁 Drive</a></span>`:''}</div>
+  </div><div class="dos-status ${stCls}">${stTxt}</div></div>
+  <div class="steps">${stepsHtml}</div><div class="pbar"><div class="pfill" style="width:${pct}%"></div></div></div>`;
+}
+
+function clickStep(num,key){const etape=ETAPES.find(e=>e.key===key);
+  if(etape.future){showToast('Interventions futures — fonctionnalité à venir','error');return}
+  const dos=dossiers.find(d=>d.numero===num);if(dos[DM[key]]){showToast(`« ${etape.label} » déjà validée le ${dos[DM[key]]}`);return}
+  const idx=ETAPES.findIndex(e=>e.key===key);
+  if(idx>0){const prev=ETAPES[idx-1];if(!prev.future&&!dos[DM[prev.key]]){showToast(`Validez d'abord « ${prev.label} »`,'error');return}}
+  document.getElementById('ms-title').textContent='Valider cette étape ?';
+  document.getElementById('ms-text').textContent=`Confirmer « ${etape.label} » pour le dossier ${num} ?`;
+  pendingStepAction={numero:num,etape:key};openModal('m-step');
+}
+async function confirmStep(){if(!pendingStepAction)return;closeModal('m-step');showLoading(true);
+  const r=await apiPost({action:'validerEtape',...pendingStepAction});showLoading(false);
+  if(r.success){await refreshData();showToast('Étape validée ✓')}else showToast(r.message,'error');pendingStepAction=null}
+
+function openProlong(num,key){prolongTarget={numero:num,etape:key};
+  const dos=dossiers.find(d=>d.numero===num);const etape=ETAPES.find(e=>e.key===key);const cur=dos[PM[key]]||0;
+  document.getElementById('mp-text').textContent=`${num} — Prolonger « ${etape.label} »${cur?' (déjà +'+cur+'j)':''}`;
+  document.getElementById('mp-days').value=7;document.getElementById('mp-motif').value='';openModal('m-prolong')}
+async function confirmProlong(){if(!prolongTarget)return;const j=parseInt(document.getElementById('mp-days').value)||7;
+  const m=document.getElementById('mp-motif').value||'Non précisé';closeModal('m-prolong');showLoading(true);
+  const r=await apiPost({action:'prolongerDelai',numero:prolongTarget.numero,etape:prolongTarget.etape,jours:j,motif:m});
+  showLoading(false);if(r.success){await refreshData();showToast('Délai prolongé de +'+j+'j')}else showToast(r.message,'error');prolongTarget=null}
+
+function openNewDossier(){const sel=document.getElementById('f-resp');
+  sel.innerHTML='<option value="">— Choisir —</option>'+config.responsables.map(r=>`<option value="${r.nom}" data-email="${r.email}">${r.nom}</option>`).join('');
+  ['f-num','f-client','f-adresse','f-obs'].forEach(id=>document.getElementById(id).value='');openModal('m-new')}
+async function submitNewDossier(){const num=document.getElementById('f-num').value.trim();const client=document.getElementById('f-client').value.trim();
+  const adresse=document.getElementById('f-adresse').value.trim();const sel=document.getElementById('f-resp');
+  const resp=sel.value;const email=sel.selectedOptions[0]?.dataset?.email||'';const obs=document.getElementById('f-obs').value.trim();
+  if(!num||!client||!adresse){showToast('N°, client et adresse obligatoires','error');return}
+  closeModal('m-new');showLoading(true);
+  const r=await apiPost({action:'creerDossier',numero:num,client,adresse,responsable:resp,emailResp:email,observations:obs});
+  showLoading(false);if(r.success){await refreshData();showToast('Dossier '+num+' créé ✓')}else showToast(r.message,'error')}
+
+function exportCSV(){let csv="N°Dossier;Client;Adresse;Responsable;Réception;Terrain;Bureau;Plan livré;Facturé;Statut\n";
+  dossiers.forEach(d=>{const st=isTermine(d)?'TERMINÉ':(getAlerte(d)?.niveau==='urgent'?'EN RETARD':'EN COURS');
+    csv+=`${d.numero};${d.client};${d.adresse};${d.responsable};${d.dateReception||''};${d.dateTerrain||''};${d.dateBureau||''};${d.dateLivraison||''};${d.dateFacture||''};${st}\n`});
+  const blob=new Blob(["\uFEFF"+csv],{type:'text/csv;charset=utf-8;'});const link=document.createElement('a');
+  link.href=URL.createObjectURL(blob);link.download='arkane_dossiers.csv';link.click();showToast('Export CSV téléchargé')}
+
+function toggleNotifs(){const al=dossiers.map(d=>({d,a:getAlerte(d)})).filter(x=>x.a);
+  if(!al.length){showToast('Aucune alerte 🎉');return}
+  let msg='⚠ ALERTES :\n\n';al.forEach(({d,a})=>{msg+=`${a.niveau==='urgent'?'🔴':'🟠'} ${d.numero} — ${d.client}\n   → « ${a.etape.label} » depuis ${a.days}j\n\n`});alert(msg)}
+
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+
+init();
+</script>
+</body>
+</html>
